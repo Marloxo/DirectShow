@@ -2,11 +2,11 @@
 Media Player Based On DirectX Show Application programming interface (API) Which is a media-streaming architecture for Microsoft Windows.
 
 ##Table of Contents :clipboard:
-- [Software](https://github.com/Marloxo/DirectShow#Software)
-- [Clone](https://github.com/Marloxo/DirectShow#Clone)
-- [Setup](https://github.com/Marloxo/DirectShow#Setup)
-- [FAQ](https://github.com/Marloxo/DirectShow#FAQ)
-- [License](https://github.com/Marloxo/DirectShow#License)
+- [Software](https://github.com/Marloxo/DirectShow#software---space_invader)
+- [Clone](https://github.com/Marloxo/DirectShow#clone-fork_and_knife)
+- [Setup](https://github.com/Marloxo/DirectShow#setup-wrench)
+- [FAQ](https://github.com/Marloxo/DirectShow#faq-speech_balloon)
+- [License](https://github.com/Marloxo/DirectShow#license---pencil)
 
 
 ##Software   :space_invader:
