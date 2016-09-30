@@ -162,10 +162,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 			break;
 		case ID_FILE_PLAY:
-			Play(hWnd);
+		{
+			TCHAR* FileName = ShowDialog();
+			if (FileName != NULL)
+			{
+				Play(hWnd, FileName);
+			}
+			
 			//Set two timers. //handle to main window //timer identifier //1-second interval
 			//SetTimer(hWnd, 0, 1000, (TIMERPROC)NULL);
-			break;
+		}
+		break;
 		case ID_FILE_STOP:
 			Stop();
 			break;

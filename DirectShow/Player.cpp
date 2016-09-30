@@ -1,5 +1,15 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include <dshow.h>
+
+//This is needed for virtually 
+//everything in BrowseFolder.
+#include <Windows.h>
+#include <Commdlg.h>
+#include <tchar.h>
+#include <string>
+#include <iostream>
+using namespace std;
+
 
 //Define my function
 int Stop();
@@ -11,7 +21,7 @@ IGraphBuilder *pGraph = NULL;
 IMediaControl *pControl = NULL;
 IMediaEventEx   *pEventEx = NULL;
 
-void Play(HWND hwnd)
+void Play(HWND hwnd, TCHAR* FileName)
 {
 	HRESULT hr;
 	try
@@ -42,8 +52,11 @@ void Play(HWND hwnd)
 		hr = pGraph->QueryInterface(IID_IMediaEvent, (void **)&pEventEx);
 
 		// Build the graph. IMPORTANT: Change this string to a file on your system.
-		hr = pGraph->RenderFile(L"C:\\video.avi", NULL);
-		ThrowIfError(hr);
+		hr = pGraph->RenderFile(FileName, NULL);
+		//ThrowIfError(hr);
+		if (FAILED(hr))
+			MessageBox(0, TEXT("ERROR - Could not Find the request file to play."), TEXT("ERROR !"), 0);
+
 
 		if (SUCCEEDED(hr))
 		{	// Run the graph.
@@ -126,4 +139,54 @@ void ThrowIfError(HRESULT hr)
 		MessageBox(0, szErr, TEXT("Basically, without saying too much, you're screwed. Royally and totally."), MB_OK | MB_ICONERROR);
 		//throw szErr;
 	}
+}
+
+
+
+TCHAR* ShowDialog()
+{
+	//check if there is file already playing
+	if (pGraph)
+	{
+		MessageBox(0, TEXT("Stop Played File First!!"), _T("Info"),
+			MB_OK | MB_ICONINFORMATION);
+		return NULL;
+	}
+
+	TCHAR*DefaultExtension = 0;
+	TCHAR*FileName = new TCHAR[MAX_PATH];;
+	TCHAR*Filter = 0;
+	int FilterIndex = 0;
+	int Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	TCHAR*InitialDir = 0;
+	HWND Owner = 0;
+	TCHAR*Title = 0;
+
+
+	OPENFILENAME ofn;
+
+	ZeroMemory(&ofn, sizeof(ofn));
+
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = Owner;
+	ofn.lpstrDefExt = DefaultExtension;
+	ofn.lpstrFile = FileName;
+	ofn.lpstrFile[0] = '\0';
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrFilter = Filter;
+	ofn.nFilterIndex = FilterIndex;
+	ofn.lpstrInitialDir = InitialDir;
+	ofn.lpstrTitle = Title;
+	ofn.Flags = Flags;
+
+	GetOpenFileName(&ofn);
+
+	if (_tcslen(FileName) == 0)
+	{
+		MessageBox(0, TEXT("NO File Selected!!"), _T("Info"),
+			MB_OK | MB_ICONINFORMATION);
+		return NULL;
+	}
+
+	return FileName;
 }

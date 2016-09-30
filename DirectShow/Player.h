@@ -7,7 +7,8 @@
 
 
 
-void Play(HWND hwnd);
+void Play(HWND hwnd, TCHAR* FileName);
 int Stop();
 bool GetCompletionEvent();
 void ThrowIfError(HRESULT hr);
+TCHAR* ShowDialog();
