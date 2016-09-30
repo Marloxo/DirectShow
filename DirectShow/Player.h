@@ -9,5 +9,5 @@
 
 void Play(HWND hwnd);
 int Stop();
-long Get_Event();
+bool GetCompletionEvent();
 void ThrowIfError(HRESULT hr);

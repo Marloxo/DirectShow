@@ -133,8 +133,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		//So we dont ask every specific time for playing status
 	case WM_GRAPHNOTIFY:
 	{
-		long evCode = Get_Event();
-		if (evCode == EC_COMPLETE)
+		bool isComplete = GetCompletionEvent();
+		if (isComplete)
 		{
 			Stop();
 		}

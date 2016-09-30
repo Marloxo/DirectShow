@@ -4,7 +4,7 @@
 //Define my function
 int Stop();
 void ThrowIfError(HRESULT hr);
-long Get_Event();
+bool GetCompletionEvent();
 
 // TODO: Initialize Global Var
 IGraphBuilder *pGraph = NULL;
@@ -81,6 +81,7 @@ int Stop()
 
 	if (pEventEx)
 	{
+		pEventEx->SetNotifyWindow((OAHWND)NULL, WM_GRAPHNOTIFY, 0);
 		pEventEx->Release();
 		pEventEx = NULL;
 	}
@@ -89,18 +90,26 @@ int Stop()
 	return 0;
 }
 
-long Get_Event()
+bool GetCompletionEvent()
 {
-	long evCode;
-	LONG_PTR param1, param2;
-	HRESULT hr = pEventEx->GetEvent(&evCode, &param1, &param2, 250);
+	if (pEventEx == NULL)
+		return false;
 
-	if (SUCCEEDED(hr))
+	while (true)
 	{
+		long evCode;
+		LONG_PTR param1, param2;
+		HRESULT hr = pEventEx->GetEvent(&evCode, &param1, &param2, 250);
+
+		if (FAILED(hr))
+			return false;
+
 		hr = pEventEx->FreeEventParams(evCode, param1, param2);
 		ThrowIfError(hr);
+
+		if (evCode == EC_COMPLETE)
+			return true;
 	}
-	return evCode;
 }
 
 //Show Error for HRESULT
