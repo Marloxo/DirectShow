@@ -129,18 +129,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
-	case WM_TIMER:
+		//Instead of case WM_TIMER to solve CPU leak -with this we make sure there is always "Get_Event()" 
+		//So we dont ask every specific time for playing status
+	case WM_GRAPHNOTIFY:
 	{
-		if (wParam != 0) //0 is our timer id which set in "SetTimer()"
-			break;
 		long evCode = Get_Event();
 		if (evCode == EC_COMPLETE)
 		{
 			Stop();
-			KillTimer(hWnd, 0);
 		}
 	}
 	break;
+	//case WM_TIMER:
+	//{
+	//	if (wParam != 0) //0 is our timer id which set in "SetTimer()"
+	//		break;
+	//	long evCode = Get_Event();
+	//	if (evCode == EC_COMPLETE)
+	//	{
+	//		Stop();
+	//		KillTimer(hWnd, 0);
+	//	}
+	//}
+	//break;
 	case WM_COMMAND:
 	{
 		int wmId = LOWORD(wParam);
@@ -151,9 +162,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 			break;
 		case ID_FILE_PLAY:
-			Play();
+			Play(hWnd);
 			//Set two timers. //handle to main window //timer identifier //1-second interval
-			SetTimer(hWnd, 0, 1000, (TIMERPROC)NULL);
+			//SetTimer(hWnd, 0, 1000, (TIMERPROC)NULL);
 			break;
 		case ID_FILE_STOP:
 			Stop();

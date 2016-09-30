@@ -9,39 +9,37 @@ long Get_Event();
 // TODO: Initialize Global Var
 IGraphBuilder *pGraph = NULL;
 IMediaControl *pControl = NULL;
-IMediaEvent   *pEvent = NULL;
+IMediaEventEx   *pEventEx = NULL;
 
-int Play()
+void Play(HWND hwnd)
 {
 	HRESULT hr;
 	try
 	{
 		if (pGraph)
-			return 1;
+			return;
 
 		// Initialize the COM library.
 		hr = CoInitialize(NULL);
 		if (FAILED(hr))
-		{//printf("ERROR - Could not initialize COM library");
+		{
 			Stop();
-
-			MessageBox(0, TEXT("ERROR !"), TEXT("Basically, without saying too much, you're screwed. Royally and totally."), 0);
-			return 1;
+			MessageBox(0, TEXT("ERROR !"), TEXT("ERROR - Could not initialize COM library"), 0);
+			return;
 		}
 
 		// Create the filter graph manager and query for interfaces.
 		hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
 			IID_IGraphBuilder, (void **)&pGraph);
 		if (FAILED(hr))
-		{	//printf("ERROR - Could not create the Filter Graph Manager.");
+		{
 			Stop();
-
-			MessageBox(0, TEXT("ERROR !"), TEXT("Basically, without saying too much, you're screwed. Royally and totally."), 0);
-			return 1;
+			MessageBox(0, TEXT("ERROR !"), TEXT("ERROR - Could not create the Filter Graph Manager."), 0);
+			return;
 		}
 
 		hr = pGraph->QueryInterface(IID_IMediaControl, (void **)&pControl);
-		hr = pGraph->QueryInterface(IID_IMediaEvent, (void **)&pEvent);
+		hr = pGraph->QueryInterface(IID_IMediaEvent, (void **)&pEventEx);
 
 		// Build the graph. IMPORTANT: Change this string to a file on your system.
 		hr = pGraph->RenderFile(L"C:\\video.avi", NULL);
@@ -54,17 +52,17 @@ int Play()
 			// Wait for completion.
 			// Note: Do not use INFINITE in a real application, because it
 			// can block indefinitely.
-
 			/*long evCode;
-			pEvent->WaitForCompletion(INFINITE, &evCode);*/
+			pEventEx->WaitForCompletion(INFINITE, &evCode);*/
 		}
+
+		//Get notification when something happened
+		pEventEx->SetNotifyWindow((OAHWND)hwnd, WM_GRAPHNOTIFY, 0);
 	}
 	catch (TCHAR szErr)
 	{
 		ThrowIfError(hr);
 	}
-
-	//Stop();
 }
 
 int Stop()
@@ -81,10 +79,10 @@ int Stop()
 		pControl = NULL;
 	}
 
-	if (pEvent)
+	if (pEventEx)
 	{
-		pEvent->Release();
-		pEvent = NULL;
+		pEventEx->Release();
+		pEventEx = NULL;
 	}
 
 	CoUninitialize();
@@ -95,11 +93,11 @@ long Get_Event()
 {
 	long evCode;
 	LONG_PTR param1, param2;
-	HRESULT hr = pEvent->GetEvent(&evCode, &param1, &param2, 250);
+	HRESULT hr = pEventEx->GetEvent(&evCode, &param1, &param2, 250);
 
 	if (SUCCEEDED(hr))
 	{
-		hr = pEvent->FreeEventParams(evCode, param1, param2);
+		hr = pEventEx->FreeEventParams(evCode, param1, param2);
 		ThrowIfError(hr);
 	}
 	return evCode;
