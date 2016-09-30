@@ -21,6 +21,8 @@ IGraphBuilder *pGraph = NULL;
 IMediaControl *pControl = NULL;
 IMediaEventEx   *pEventEx = NULL;
 
+bool ispaused=false;
+
 void Play(HWND hwnd, TCHAR* FileName)
 {
 	HRESULT hr;
@@ -141,7 +143,20 @@ void ThrowIfError(HRESULT hr)
 	}
 }
 
-
+void Pause()
+{
+	if (ispaused)
+	{
+		pControl->Run(); //resumes the media if it was previously paused
+		ispaused = false;
+	}
+	else
+	{
+		pControl->Pause(); //to pause the media 
+		ispaused = true;
+	}
+	
+}
 
 TCHAR* ShowDialog()
 {

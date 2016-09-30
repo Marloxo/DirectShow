@@ -102,7 +102,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hInst = hInstance; // Store instance handle in our global variable
 
 	HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+		SS_BITMAP | WS_VISIBLE | WS_CHILD, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+	MoveWindow(hWnd, 340, 250, 255, 280, TRUE);
+
+	//Change window background
+	HBITMAP hImage = (HBITMAP)LoadImage(NULL, L"pic.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	HWND hImageView = CreateWindowEx(NULL, L"STATIC", NULL,
+		SS_BITMAP | WS_VISIBLE | WS_CHILD, 0, 00, 500, 600, hWnd, nullptr, GetModuleHandle(NULL), NULL);
+	SendMessage(hImageView, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hImage);
 
 	if (!hWnd)
 	{
@@ -130,7 +138,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 		//Instead of case WM_TIMER to solve CPU leak -with this we make sure there is always "Get_Event()" 
-		//So we dont ask every specific time for playing status
+		//So we don't ask every specific time for playing status
 	case WM_GRAPHNOTIFY:
 	{
 		bool isComplete = GetCompletionEvent();
@@ -168,11 +176,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				Play(hWnd, FileName);
 			}
-			
+
 			//Set two timers. //handle to main window //timer identifier //1-second interval
 			//SetTimer(hWnd, 0, 1000, (TIMERPROC)NULL);
 		}
 		break;
+		case ID_FILE_PAUSE:
+			Pause();
+			break;
 		case ID_FILE_STOP:
 			Stop();
 			break;
