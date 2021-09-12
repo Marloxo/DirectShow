@@ -1,7 +1,7 @@
 # DirectShow Media Player :musical_note: :clapper:
 Media Player Based On DirectX Show Application programming interface (API) Which is a media-streaming architecture for Microsoft Windows.
 
-##Table of Contents :clipboard:
+## Table of Contents :clipboard:
 - [Software](https://github.com/Marloxo/DirectShow#software---space_invader)
 - [Clone](https://github.com/Marloxo/DirectShow#clone-fork_and_knife)
 - [Setup](https://github.com/Marloxo/DirectShow#setup-wrench)
@@ -9,18 +9,18 @@ Media Player Based On DirectX Show Application programming interface (API) Which
 - [License](https://github.com/Marloxo/DirectShow#license---pencil)
 
 
-##Software   :space_invader:
+## Software   :space_invader:
 Build on **Win32** project using **C++**. Make sure to have the newest version of *VS2015* installed before running the project.
 
 The project folder is called **`DirectShow`**.
 
-##Clone :fork_and_knife:
+## Clone :fork_and_knife:
 Clone this repo to your local machine using [`https://github.com/Marloxo/DirectShow.git`][1]
 
-##Setup :wrench:
+## Setup :wrench:
 Just Make sure To have The latest DirectShow headers and libraries which available in the [Windows SDK.](http://go.microsoft.com/fwlink/p/?linkid=62332)
 
-###Header Files
+### Header Files
 All DirectShow applications use the header file shown in the following table.
 
 | Header File | Required For | 
@@ -29,7 +29,7 @@ All DirectShow applications use the header file shown in the following table.
  
 Some DirectShow interfaces require additional header files. These requirements are noted in the interface reference.
 
-###Library Files
+### Library Files
 
 DirectShow uses the static library files shown in the following table.
 
@@ -38,10 +38,10 @@ DirectShow uses the static library files shown in the following table.
 | Strmiids.lib | Exports class identifiers (CLSIDs) and interface identifiers (IIDs). |
 | Quartz.lib | Exports the [AMGetErrorText][2] function. If you do not call this function, this library is not required. |
 
-##FAQ :speech_balloon:
+## FAQ :speech_balloon:
 [Check out this link.][3]
 
-##License   :pencil:
+## License   :pencil:
 [![MIT Licence][4]][5]
 
 This project is released into the public domain. For more information see  [LICENSE][6].
